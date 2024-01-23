@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import {getCast, getTVShow} from "../api/api";
 import { Image, Text, StyleSheet, ScrollView, Button, View, FlatList, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import WelcomePopup from "../components/WelcomePopUp";
 
 
 const Home = ({ navigation }) => {
   const [show, setShow] = useState(null); // Initializing show as null
   const [castList, setCastList] = useState(null); // Initializing castList as null
   const [loading, setLoading] = useState(true); // Tracking loading state
+  const [isWelcomeVisible, setWelcomeVisible] = useState(true);
   
+  const closeWelcome = () => {
+  setWelcomeVisible(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +75,7 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["bottom"]}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent} >
         <View>
           <Image source={{ uri: show.image.original }} style={styles.image} />
           <Text style={styles.title}>{show.name}</Text>
@@ -108,7 +113,7 @@ const Home = ({ navigation }) => {
           </View>
 
           {castList && castList.length > 0 && (
-            <View style={{marginBottom:20}}>
+            <View style={{ marginBottom: 20 }}>
               <Text style={styles.subtitle}>Cast</Text>
               <FlatList
                 horizontal={true}
@@ -119,6 +124,7 @@ const Home = ({ navigation }) => {
           )}
         </View>
       </ScrollView>
+      <WelcomePopup isVisible={isWelcomeVisible} onClose={closeWelcome} />
     </SafeAreaView>
   );
 };
